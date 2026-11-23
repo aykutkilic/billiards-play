@@ -3,7 +3,7 @@
 // latest release; the cache is only a fallback). Each release gets a fresh
 // cache; only this game's old caches are dropped (other games share the
 // origin – aykutkilic.github.io – and keep theirs).
-const VERSION = '6e6d2ca.11230101';
+const VERSION = '1a2ff9b.11230114';
 const CACHE = `billiards-${VERSION}`;
 const SHELL = ['./', './index.html', './manifest.webmanifest', './src/style.css', './src/main.js', './icons/icon-192.png'];
 
