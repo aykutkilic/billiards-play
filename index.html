@@ -11,7 +11,10 @@
   <title>Billiards</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Billiards">
+  <!-- (the browser may offer to install before the game has loaded: kept for pwa.js) -->
+  <script>addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); window.__install = e; dispatchEvent(new Event('billiards:install')); });</script>
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
@@ -31,6 +34,7 @@
     <button id="assistBtn" class="chip" title="Aiming aid (A)"><span class="ico">◎</span><b id="assistName">Aim line</b></button>
     <button id="replayBtn" class="chip icon" title="Replay the last shot (R)" aria-label="Replay the last shot">⟲</button>
     <button id="undoBtn" class="chip icon" title="Take the shot back (U)">↶</button>
+    <button id="fsChip" class="chip icon" title="Fullscreen" aria-label="Fullscreen" hidden>⛶</button>
     <button id="panelPill" class="chip pill" title="Room, game &amp; settings (Esc)"><i class="pillDot"></i><span id="pillName">Menu</span> <b id="pillCode"></b><span id="pillOnline"></span> <span>▾</span></button>
   </div>
 
@@ -176,8 +180,7 @@
       <div class="row lbl"><span>Aiming aid</span><select id="assistSel"><option value="off">Off</option><option value="line">Aim line</option><option value="preview">Shot preview</option></select></div>
       <div class="row lbl"><span>Graphics</span><select id="qualSel"><option value="auto">Auto</option><option value="high">High</option><option value="low">Light</option></select></div>
       <div class="row lbl"><span>Follow the balls (TV)</span><input type="checkbox" id="followChk" checked></div>
-      <div class="row" id="installRow" hidden><button id="installBtn" class="ghost">Install app</button></div>
-      <p id="iosHint" class="muted small" hidden>On iPhone / iPad: Share → Add to Home Screen.</p>
+      <div class="row"><button id="fsBtn2" class="ghost">⛶ Fullscreen</button><button id="installBtn" class="ghost">📲 Install app</button></div>
       <p class="muted small" id="verTag"></p>
     </section>
 
@@ -230,6 +233,16 @@
       <h2 id="overTitle"></h2>
       <p id="overText" class="muted"></p>
       <div class="row center"><button id="againBtn" class="primary">Play again</button><button id="overReplay" class="ghost">Replay the shot</button><button id="overMenu" class="ghost">Menu</button></div>
+    </div>
+  </div>
+
+  <!-- installing, where the browser doesn't ask by itself -->
+  <div id="installBox" class="modal" hidden>
+    <div class="card">
+      <h3>Install Billiards</h3>
+      <p id="installWhy" class="muted small"></p>
+      <ol id="installSteps"></ol>
+      <div class="row end"><button id="installCopy" class="ghost">Copy link</button><button id="installClose" class="primary">OK</button></div>
     </div>
   </div>
 

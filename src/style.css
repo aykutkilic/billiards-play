@@ -118,6 +118,7 @@ body.ai #stroke, body.ai #spinBox, body.watch #stroke, body.watch #spinBox { opa
 @keyframes blink { 50% { opacity: .2; } }
 body.replaying #stroke, body.replaying #spinBox, body.replaying #hint { visibility: hidden; }
 #videoView { display: block; max-width: min(640px, 86vw); max-height: 62dvh; margin: 0 auto; border-radius: 12px; background: #000; }
+#installSteps { margin: 8px 0 4px; padding-left: 20px; line-height: 1.7; }
 #narBar { height: 6px; border-radius: 3px; background: rgba(255,255,255,.1); overflow: hidden; }
 #narBar i { display: block; height: 100%; width: 0; background: var(--accent); }
 
