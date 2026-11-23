@@ -38,10 +38,12 @@ input[type=range] { accent-color: var(--accent); }
 .warn { color: var(--bad); min-height: 1em; }
 
 /* scoreboard */
-#hud {
-  position: fixed; top: calc(6px + var(--safe-t)); left: 50%; transform: translateX(-50%);
-  display: flex; align-items: center; gap: 8px; pointer-events: none; z-index: 5;
+/* one row (the score in the middle of what the buttons leave), or two where that doesn't fit */
+#topBar {
+  position: fixed; top: calc(6px + var(--safe-t)); left: calc(8px + var(--safe-l)); right: calc(8px + var(--safe-r)); z-index: 7;
+  display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px 12px; pointer-events: none;
 }
+#hud { display: flex; align-items: center; gap: 8px; margin: 0 auto; min-width: 0; max-width: 100%; }
 .pcard {
   display: flex; align-items: center; gap: 8px; background: var(--glass); border: 1px solid var(--line);
   border-radius: 12px; padding: 5px 10px; min-width: 118px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
@@ -60,7 +62,7 @@ input[type=range] { accent-color: var(--accent); }
 #onText::first-letter { text-transform: uppercase; }
 
 #toast {
-  position: fixed; top: calc(64px + var(--safe-t)); left: 50%; transform: translateX(-50%); z-index: 6;
+  position: fixed; top: calc(18px + var(--bar, 46px) + var(--safe-t)); left: 50%; transform: translateX(-50%); z-index: 6;
   background: rgba(10,10,12,.8); border: 1px solid var(--line); border-radius: 12px; padding: 8px 16px; font-weight: 600;
   pointer-events: none; text-align: center; max-width: 80vw; animation: pop .25s ease-out;
 }
@@ -72,7 +74,8 @@ input[type=range] { accent-color: var(--accent); }
   color: rgba(255,255,255,.75); font-size: 12px; text-shadow: 0 1px 3px #000; pointer-events: none; text-align: center; white-space: nowrap;
 }
 
-#topRight { position: fixed; top: calc(6px + var(--safe-t)); right: calc(8px + var(--safe-r)); display: flex; gap: 6px; z-index: 7; flex-wrap: wrap; justify-content: flex-end; max-width: 46vw; }
+#topRight { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; margin-left: auto; max-width: 100%; }
+#topRight > * { pointer-events: auto; white-space: nowrap; }
 .chip { background: var(--glass); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border-radius: 999px; padding: 6px 11px; display: flex; align-items: center; gap: 5px; font-size: 12px; }
 .chip .ico { font-size: 13px; }
 .chip.icon { padding: 6px 10px; font-size: 15px; }
@@ -186,6 +189,7 @@ input[type=color] { width: 34px; height: 26px; padding: 0; border: 1px solid var
 
 #updateBtn { position: fixed; bottom: calc(12px + var(--safe-b)); left: 50%; transform: translateX(-50%); z-index: 40; background: var(--accent); color: #1b1407; padding: 8px 14px; border-radius: 999px; font-weight: 600; cursor: pointer; }
 
+@media (max-width: 1100px) { #camName, #assistName { display: none; } }
 @media (max-height: 460px) {
   #spinPad { width: 78px; height: 78px; }
   #elevBox { height: 78px; }
@@ -196,9 +200,7 @@ input[type=color] { width: 34px; height: 26px; padding: 0; border: 1px solid var
   #topRight .chip b { display: none; }
 }
 @media (max-width: 560px) {
-  #hud { left: 8px; transform: none; }
   #onText { display: none; }
-  #topRight { max-width: 40vw; }
   #topRight .chip b { display: none; }
   .pname { max-width: 70px; }
 }
