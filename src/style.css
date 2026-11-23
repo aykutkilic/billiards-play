@@ -114,6 +114,16 @@ body.ai #stroke, body.ai #spinBox, body.watch #stroke, body.watch #spinBox { opa
 #legend span { white-space: nowrap; background: var(--glass); border-radius: 8px; padding: 2px 8px; font-size: 11px; border: 1px solid var(--line); }
 #legend i { display: inline-block; width: 10px; height: 3px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
 
+/* replay */
+#replayBar { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + var(--safe-b)); z-index: 8; display: flex; align-items: center; gap: 8px; background: var(--glass); border: 1px solid var(--line); border-radius: 999px; padding: 6px 8px 6px 14px; white-space: nowrap; }
+#replayBar i { width: 9px; height: 9px; border-radius: 50%; background: #ffd54a; }
+#replayBar.rec i { background: var(--bad); animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: .2; } }
+body.replaying #stroke, body.replaying #spinBox, body.replaying #hint, body.replaying #legend { visibility: hidden; }
+#videoView { display: block; max-width: min(640px, 86vw); max-height: 62dvh; margin: 0 auto; border-radius: 12px; background: #000; }
+#narBar { height: 6px; border-radius: 3px; background: rgba(255,255,255,.1); overflow: hidden; }
+#narBar i { display: block; height: 100%; width: 0; background: var(--accent); }
+
 /* panel */
 #panel {
   position: fixed; top: calc(8px + var(--safe-t)); right: calc(8px + var(--safe-r)); bottom: calc(8px + var(--safe-b)); width: min(400px, calc(100vw - 16px));
