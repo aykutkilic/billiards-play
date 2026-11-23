@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="felt" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#2a7ad0"/><stop offset="1" stop-color="#0e3766"/></radialGradient>
+    <radialGradient id="b8" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#555"/><stop offset=".5" stop-color="#151515"/><stop offset="1" stop-color="#000"/></radialGradient>
+    <radialGradient id="cue" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#e8e2d2"/><stop offset="1" stop-color="#9a9384"/></radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#felt)"/>
+  <circle cx="300" cy="230" r="120" fill="url(#b8)"/>
+  <circle cx="300" cy="230" r="52" fill="#f4f0e2"/>
+  <text x="300" y="256" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="74" text-anchor="middle" fill="#111">8</text>
+  <circle cx="150" cy="380" r="66" fill="url(#cue)"/>
+  <ellipse cx="270" cy="150" rx="40" ry="22" fill="#fff" opacity=".18"/>
+</svg>
