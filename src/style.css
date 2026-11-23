@@ -80,6 +80,7 @@ input[type=range] { accent-color: var(--accent); }
 .chip { background: var(--glass); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border-radius: 999px; padding: 6px 11px; display: flex; align-items: center; gap: 5px; font-size: 12px; }
 .chip .ico { font-size: 13px; }
 .chip.icon { padding: 6px 10px; font-size: 15px; }
+#placeBtn.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
 #topRight .chip b.letter { display: inline; font-size: 14px; font-weight: 700; min-width: 13px; text-align: center; }
 .pill { font-weight: 600; }
 .pillDot { width: 8px; height: 8px; border-radius: 50%; background: #777; }

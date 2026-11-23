@@ -32,6 +32,7 @@
     <button id="camBtn" class="chip" title="Camera (F2)"><span class="ico">🎥</span><b id="camName">First person</b></button>
     <button id="assistBtn" class="chip" title="Aiming aid (A)"><span class="ico">◎</span><b id="assistName">Aim line</b></button>
     <button id="replayBtn" class="chip icon" title="Replay the last shot (R)" aria-label="Replay the last shot"><b class="letter">R</b></button>
+    <button id="placeBtn" class="chip icon" title="Practice: move the balls" aria-label="Move the balls" hidden>✋</button>
     <button id="undoBtn" class="chip icon" title="Take the shot back (U)">↶</button>
     <button id="fsChip" class="chip icon" title="Fullscreen" aria-label="Fullscreen" hidden>⛶</button>
     <button id="panelPill" class="chip pill" title="Room, game &amp; settings (Esc)"><i class="pillDot"></i><span id="pillName">Menu</span> <b id="pillCode"></b><span id="pillOnline"></span> <span>▾</span></button>
@@ -77,8 +78,9 @@
 
     <section class="tab" data-tab="game" hidden>
       <div class="games" id="gameList"></div>
-      <div class="row lbl"><span>Opponent</span>
+      <div class="row lbl"><span>Play against</span>
         <select id="oppSel">
+          <option value="practice">Nobody – practice</option>
           <option value="ai:easy">Computer – Easy</option>
           <option value="ai:normal" selected>Computer – Normal</option>
           <option value="ai:pro">Computer – Pro</option>
@@ -172,6 +174,7 @@
         <p><b>First person view:</b> drag up/down to swing your eyes over the ball, which stays where it is on the screen; slide two fingers (or middle-drag) to raise and lower your head. Keys: E / Q head up / down, Page Up / Page Down over the ball, Home resets.</p>
         <p><b>Stroke:</b> the cue follows your finger on the stroke strip. Pull back, then push through the ball – the cue's speed when it meets the ball is the shot. Lifting the finger never shoots. With a mouse, hold the <b>right button</b> anywhere and move it back and forward.</p>
         <p><b>Spin &amp; elevation:</b> drag the dot on the ball (bottom left) for side, follow and draw; raise the cue with the slider for massé, piqué and jump shots. <b>Piqué:</b> 70–80°, dot low – the ball goes out and comes back. <b>Massé:</b> 70–80°, dot low and to one side – it sets off along the cue and hooks round to that side; harder goes further first. Past the dashed ring the tip slips (miscue).</p>
+        <p><b>3-cushion preview:</b> the cushions are numbered; ×2 marks where the cue ball meets the first ball again (a kiss – allowed, but hard to control).</p>
         <p><b>Keys:</b> ← → aim (Shift: fine), ↑ ↓ elevation, W A S D spin, Space hold-and-release stroke, F2 / C camera, V aid, U undo, R (or the R button) replay the last shot – 🎬 saves it as a video –, Esc skip to the end of a rolling shot (otherwise the menu).</p>
       </div>
     </section>
@@ -179,6 +182,7 @@
     <section class="tab" data-tab="view" hidden>
       <div class="row lbl"><span>Camera (aiming)</span><select id="camSel"></select></div>
       <div class="row lbl"><span>Camera (balls rolling)</span><select id="watchSel"></select></div>
+      <div class="row lbl"><span>Replay scores</span><select id="autoSel"><option value="carom">3-cushion points</option><option value="all">Points and pots</option><option value="off">No</option></select></div>
       <div class="row lbl"><span>Aiming aid</span><select id="assistSel"><option value="off">Off</option><option value="line">Aim line</option><option value="preview">Shot preview</option></select></div>
       <div class="row lbl"><span>Graphics</span><select id="qualSel"><option value="auto">Auto</option><option value="high">High</option><option value="low">Light</option></select></div>
       <div class="row lbl"><span>Follow the balls (TV)</span><input type="checkbox" id="followChk" checked></div>
