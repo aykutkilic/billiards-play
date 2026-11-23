@@ -98,7 +98,7 @@
       <div id="seats" hidden>
         <h4>At the table</h4>
         <ul id="seatList"></ul>
-        <p class="muted small">Tap a seat to sit down; the rest watch.</p>
+        <p class="muted small">Tap a seat to sit down – guests between frames; the rest watch.</p>
       </div>
     </section>
 
@@ -122,12 +122,12 @@
       <div id="members" hidden><h4>In the room</h4><ul id="memberList"></ul><button id="clearBans" class="ghost small" hidden>Clear bans</button></div>
       <div class="section" id="friends">
         <h4>Play with friends</h4>
-        <p class="muted small">Create a room and send the invite link – friends join this table right where it is. Everything else in the room watches.</p>
+        <p class="muted small">Create a room and send the invite link – friends join this table right where it is. Whoever isn’t playing watches.</p>
         <div id="onlineRooms" hidden>
           <div class="orHead"><b>Online rooms</b><span id="orCount" class="muted small"></span><button id="orRefresh" class="ghost small" title="Refresh">↻</button></div>
-          <div class="filters small"><label><input type="checkbox" id="showLocked"> locked</label><label><input type="checkbox" id="showFull"> full</label><label><input type="checkbox" id="showEmpty" checked> empty</label></div>
           <ul id="orList"></ul>
           <div id="orNote" class="muted small"></div>
+          <button id="listBtn" class="ghost small" hidden>All rooms &amp; filters…</button>
         </div>
         <div id="createRow">
           <div class="row">
@@ -142,7 +142,6 @@
         </div>
         <div class="row" id="joinRow">
           <input id="joinCode" placeholder="Room code" maxlength="4" autocapitalize="characters" style="text-transform:uppercase">
-          <input id="joinPass" placeholder="Password" maxlength="20" hidden>
           <button id="joinBtn">Join</button>
         </div>
         <div id="friendsStatus" class="muted small"></div>
@@ -204,13 +203,49 @@
     </section>
   </aside>
 
-  <!-- online room list (filters) -->
-  <div id="passAsk" class="modal" hidden>
-    <div class="card">
-      <h3>Password for <span id="passFor"></span></h3>
-      <input id="passIn" maxlength="20" autocomplete="off">
-      <div class="row end"><button id="passCancel" class="ghost">Cancel</button><button id="passGo" class="primary">Join</button></div>
+  <!-- something to decide about who plays (the host), or to ask for (someone watching) -->
+  <div id="seatAsk" hidden><span id="seatAskText"></span><button id="seatAskYes" class="primary small"></button><button id="seatAskNo" class="ghost small"></button></div>
+
+  <!-- the public room list -->
+  <div id="rooms" class="modal" hidden>
+    <div class="card roomsCard">
+      <header class="roomsHead"><h3>Room list</h3><span id="roomsCount" class="muted small"></span>
+        <button id="roomsClose" class="ghost icon" title="Close (Esc)" aria-label="Close the room list">✕</button></header>
+      <div id="roomsFull" class="warn small" hidden></div>
+      <div class="roomsBody">
+        <div class="roomsTable">
+          <table>
+            <colgroup><col><col class="cg"><col class="cp"><col class="cl"><col class="cd"></colgroup>
+            <thead><tr><th>Name</th><th>Game</th><th>People</th><th>Pass</th><th>Distance</th></tr></thead>
+            <tbody id="roomsList"></tbody>
+          </table>
+          <div id="roomsNote" class="muted small"></div>
+        </div>
+        <div class="roomsSide">
+          <button id="roomsRefresh">Refresh</button>
+          <button id="roomsJoin" class="primary" disabled>Join room</button>
+          <button id="roomsCreate">Create room</button>
+        </div>
+      </div>
+      <div class="roomsPass" id="roomsPass" hidden>
+        <span id="roomsPassFor" class="small"></span>
+        <input id="roomsPassIn" placeholder="Password" maxlength="20" autocomplete="off">
+        <button id="roomsPassGo" class="primary">Join</button>
+      </div>
+      <div class="filters small">
+        <label><input type="checkbox" id="showLocked"> Show locked</label>
+        <label><input type="checkbox" id="showFull"> Show full</label>
+        <label title="Rooms with only their host in them"><input type="checkbox" id="showEmpty"> Show empty</label>
+      </div>
     </div>
+  </div>
+
+  <!-- the host sending someone out (a person's ⋯ in the Room tab) -->
+  <div id="kickMenu" hidden>
+    <div class="km-name"></div>
+    <input id="kickReason" placeholder="Reason (optional)" maxlength="28" autocomplete="off">
+    <div class="km-row"><button id="kickBtn" class="small">Kick</button><button id="banBtn" class="small danger">Ban</button></div>
+    <div class="muted small">The computer takes their seat. Kicked: back in 2 min. Banned: not while the room is open – another browser gets round it.</div>
   </div>
 
   <!-- player editor -->

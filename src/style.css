@@ -162,6 +162,47 @@ button.icon { padding: 4px 9px; }
 ul { list-style: none; padding: 0; margin: 4px 0; }
 #orList li, #memberList li, #seatList li { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 6px 8px; border-radius: 8px; background: rgba(255,255,255,.04); margin-bottom: 4px; }
 #orList li button, #memberList li button { padding: 3px 8px; font-size: 12px; }
+#orList { max-height: 240px; overflow: auto; }
+#orList li[data-code] { cursor: pointer; }
+#orList li[data-code]:hover { background: rgba(255,255,255,.09); }
+#orList li.full { opacity: .55; }
+#orList .orName { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#orList .orMeta { color: var(--muted); font-size: 12px; white-space: nowrap; flex-shrink: 0; }
+.live { font-size: 10px; font-weight: 800; padding: 1px 5px; border-radius: 4px; background: rgba(255,106,92,.25); color: #ffb3aa; margin-right: 6px; }
+.kicky { font-size: 10px; padding: 1px 5px; border-radius: 4px; background: rgba(255,214,90,.18); color: #ffd65a; margin-left: 6px; }
+#seatAsk { position: fixed; left: 50%; bottom: calc(34px + var(--safe-b)); transform: translateX(-50%); z-index: 8; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 8px; max-width: calc(100vw - 24px); width: max-content; padding: 7px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--glass); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); font-size: 13px; }
+#seatAsk[hidden], #kickMenu[hidden] { display: none; }
+#kickMenu { position: fixed; z-index: 25; width: 240px; background: #15171b; border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.5); }
+.km-name { font-weight: 700; }
+.km-row { display: flex; gap: 6px; }
+.km-row button { flex: 1; }
+.roomsCard { width: 780px; max-width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.roomsHead { display: flex; align-items: baseline; gap: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+.roomsHead h3 { margin: 0; }
+#roomsCount { margin-left: auto; }
+.roomsBody { display: flex; gap: 14px; min-height: 0; }
+.roomsTable { flex: 1; min-width: 0; max-height: min(52vh, 440px); overflow: auto; }
+.roomsTable table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 13px; }
+.roomsTable col.cg { width: 84px; } .roomsTable col.cp { width: 60px; } .roomsTable col.cl { width: 48px; } .roomsTable col.cd { width: 92px; }
+.roomsTable th { position: sticky; top: 0; background: #15171b; text-align: left; font-weight: 600; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.roomsTable td { padding: 8px; border-bottom: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.roomsTable tr[data-code] { cursor: pointer; }
+.roomsTable tr[data-code]:hover { background: rgba(255,255,255,.05); }
+.roomsTable tr.sel { background: rgba(232,194,106,.16); }
+.roomsTable tr.full td { color: var(--muted); }
+#roomsNote:not(:empty) { padding: 14px 8px; }
+.roomsSide { display: flex; flex-direction: column; gap: 8px; width: 140px; }
+.roomsPass { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.roomsPass[hidden] { display: none; }
+.roomsPass input { flex: 1; min-width: 120px; }
+@media (max-width: 640px) {
+  .roomsBody { flex-direction: column; }
+  .roomsSide { width: auto; flex-direction: row; }
+  .roomsSide button { flex: 1; }
+  .roomsTable col.cg { width: 70px; } .roomsTable col.cp { width: 48px; } .roomsTable col.cl { width: 40px; } .roomsTable col.cd { width: 66px; }
+  .roomsTable th, .roomsTable td { padding: 7px 4px; }
+  #pillOnline .lng { display: none; }
+}
 #seatList li { cursor: pointer; }
 #seatList li.mine { border: 1px solid var(--accent); }
 .orHead { display: flex; align-items: center; gap: 8px; }
