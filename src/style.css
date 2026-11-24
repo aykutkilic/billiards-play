@@ -88,13 +88,24 @@ input[type=range] { accent-color: var(--accent); }
 .pill.online .pillDot { background: var(--good); box-shadow: 0 0 6px var(--good); }
 #pillOnline { color: var(--muted); font-weight: 400; }
 
+/* the velocity curve */
+#curvePad { width: 100%; height: auto; display: block; touch-action: none; cursor: ns-resize; background: rgba(255,255,255,.03); border: 1px solid var(--line); border-radius: 10px; }
+#curvePresets { margin: 6px 0 12px; }
+
+/* the shot preview's speed, on its line */
+#pvSpeed { position: fixed; left: 0; top: 0; z-index: 4; pointer-events: none; padding: 2px 8px; border-radius: 999px; background: var(--glass); border: 1px solid var(--line); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; transform: translateY(-50%); transform-origin: left center; transition: transform .12s; }
+#pvSpeed.moving { border-color: var(--accent); color: var(--accent); transform: translateY(-50%) scale(1.25); }
+
 /* spin pad */
 #spinBox { position: fixed; left: calc(10px + var(--safe-l)); bottom: calc(10px + var(--safe-b)); z-index: 6; display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; gap: 2px 8px; align-items: center; }
 #spinPad { width: 96px; height: 96px; touch-action: none; border-radius: 50%; filter: drop-shadow(0 4px 10px rgba(0,0,0,.6)); cursor: crosshair; }
-#elevBox { display: flex; flex-direction: column; align-items: center; height: 96px; gap: 2px; }
-#elev { writing-mode: vertical-lr; direction: rtl; width: 26px; height: 78px; touch-action: none; }
-#elevVal { font-size: 11px; color: var(--muted); }
+#elevBox { position: relative; height: 96px; }
+#elevPad { width: 96px; height: 96px; display: block; touch-action: none; border-radius: 12px; border: 1px solid var(--line); box-sizing: border-box; cursor: grab; }
+#elevVal { position: absolute; right: 6px; bottom: 3px; font-size: 11px; color: #fff; text-shadow: 0 1px 2px #000; white-space: nowrap; pointer-events: none; font-variant-numeric: tabular-nums; }
 #spinVal { grid-column: 1 / span 2; text-align: left; }
+#spinPad, #elevBox { transition: transform .12s; }
+#spinPad.moving, #elevBox.moving { transform: scale(1.12); }
+#elevBox.moving #elevPad { border-color: var(--accent); }
 
 /* stroke strip */
 #stroke {
@@ -237,7 +248,7 @@ input[type=color] { width: 34px; height: 26px; padding: 0; border: 1px solid var
 @media (max-height: 460px) {
   #spinPad { width: 78px; height: 78px; }
   #elevBox { height: 78px; }
-  #elev { height: 62px; }
+  #elevPad { width: 78px; height: 78px; }
   #stroke { height: min(70dvh, 300px); width: 64px; }
   .pcard { min-width: 96px; padding: 3px 8px; }
   .pscore { font-size: 18px; }

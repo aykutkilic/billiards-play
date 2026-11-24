@@ -15,9 +15,47 @@
   <meta name="apple-mobile-web-app-title" content="Billiards">
   <!-- (the browser may offer to install before the game has loaded: kept for pwa.js) -->
   <script>addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); window.__install = e; dispatchEvent(new Event('billiards:install')); });</script>
+  <!-- shown until the first picture of the table (main.js takes it away); styled here, as it comes before everything -->
+  <style>
+    html { background: #0a0b0d; }
+    #loader { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; background: radial-gradient(circle at 50% 42%, #17305a, #0a0b0d 70%); color: #f1efe9; font: 15px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; text-align: center; transition: opacity .35s; }
+    #loader.done { opacity: 0; pointer-events: none; }
+    #loader .balls { display: flex; gap: 12px; }
+    #loader .balls i { width: 26px; height: 26px; border-radius: 50%; box-shadow: inset -4px -5px 8px rgba(0,0,0,.4), inset 4px 4px 7px rgba(255,255,255,.45); animation: loadBall 1.1s cubic-bezier(.4,0,.6,1) infinite; will-change: transform; }
+    #loader .balls i:nth-child(1) { background: #f4f1ea; } #loader .balls i:nth-child(2) { background: #e0b32a; animation-delay: .14s; } #loader .balls i:nth-child(3) { background: #c8362c; animation-delay: .28s; }
+    #loader.failed .balls { display: none; }
+    #loader p { margin: 0; padding: 0 24px; max-width: 420px; }
+    #loader button { font: inherit; font-weight: 600; padding: 9px 20px; border: 0; border-radius: 999px; background: #e8c26a; color: #1b1407; cursor: pointer; }
+    #loader button[hidden] { display: none; }
+    @keyframes loadBall { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-20px); } }
+    @media (prefers-reduced-motion: reduce) { #loader .balls i { animation-name: loadDim; } @keyframes loadDim { 50% { opacity: .35; } } }
+  </style>
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
+  <div id="loader" role="status">
+    <div class="balls" aria-hidden="true"><i></i><i></i><i></i></div>
+    <p id="loadText">Setting up the table…</p>
+    <button id="loadAgain" hidden>Try again</button>
+  </div>
+  <script>
+    // (slow, or something missing: said so instead of waiting for ever)
+    (function () {
+      var el = document.getElementById('loader'), text = document.getElementById('loadText'), again = document.getElementById('loadAgain');
+      again.onclick = function () { location.reload(); };
+      function say(t, failed) { if (!el.isConnected || el.className === 'done') return; text.textContent = t; again.hidden = false; if (failed) el.className = 'failed'; }
+      setTimeout(function () { if (el.className !== 'failed') say('Still loading – the connection may be slow.'); }, 15000);
+      // (an older main.js from the cache doesn't know of this: gone all the same once the game runs)
+      var watch = setInterval(function () {
+        if (!el.isConnected) clearInterval(watch);
+        else if (window.__billiards && window.__billiards.phys && !document.hidden) { clearInterval(watch); setTimeout(function () { el.remove(); }, 2500); }
+      }, 500);
+      addEventListener('error', function (e) {
+        if (e.target && e.target.id === 'mainScript') say('The game could not be loaded. Check the connection.', true);
+        else if (e.message) say('The game could not start: ' + e.message, true);
+      }, true);
+    })();
+  </script>
   <canvas id="view"></canvas>
   <canvas id="fade" hidden></canvas>
 
@@ -40,12 +78,13 @@
   </div>
   <div id="toast" hidden></div>
   <div id="hint"></div>
+  <div id="pvSpeed" hidden></div>
 
   <!-- spin and elevation -->
   <div id="spinBox">
     <canvas id="spinPad" width="192" height="192" aria-label="Where the tip strikes the cue ball"></canvas>
     <div id="elevBox">
-      <input id="elev" type="range" min="0" max="85" step="1" value="4" aria-label="Cue elevation" orient="vertical">
+      <canvas id="elevPad" width="192" height="192" role="slider" aria-label="Cue elevation" aria-valuemin="0" aria-valuemax="85"></canvas>
       <span id="elevVal">4°</span>
     </div>
     <div id="spinVal" class="muted small">centre</div>
@@ -166,13 +205,18 @@
 
     <section class="tab" data-tab="controls" hidden>
       <div class="row lbl"><span>Stroke sensitivity <b id="sensVal"></b></span><input id="sens" type="range" min="0.4" max="2.5" step="0.05" value="1"></div>
+      <div class="row lbl"><span>Velocity curve</span><span class="muted small" style="text-align:right">flat: finer · steep: quicker</span></div>
+      <canvas id="curvePad" width="720" height="460" aria-label="How hard the ball is struck for how fast the cue comes"></canvas>
+      <div id="curvePresets" class="seg"><button class="small" data-k="straight">Straight</button><button class="small" data-k="soft">Fine soft</button><button class="small" data-k="medium">Fine medium</button><button class="small" data-k="hard">Fine hard</button></div>
       <div class="row lbl"><span>Stroke strip on the</span><select id="strokeSide"><option value="right">Right</option><option value="left">Left</option></select></div>
       <div class="row lbl"><span>Aim sensitivity <b id="aimSensVal"></b></span><input id="aimSens" type="range" min="0.3" max="2.5" step="0.05" value="1"></div>
       <div class="help small">
-        <p><b>Aim:</b> drag on the table (in Top view, the cue points where you drag; slow drags are fine). Tap a ball to aim straight at it. Two fingers: pinch to zoom, slide up/down to tilt.</p>
-        <p><b>First person view:</b> drag up/down to swing your eyes over the ball, which stays where it is on the screen; slide two fingers (or middle-drag) to raise and lower your head. Keys: E / Q head up / down, Page Up / Page Down over the ball, Home resets.</p>
-        <p><b>Stroke:</b> the cue follows your finger on the stroke strip. Pull back, then push through the ball – the cue's speed when it meets the ball is the shot. Lifting the finger never shoots. With a mouse, hold the <b>right button</b> anywhere and move it back and forward.</p>
-        <p><b>Spin &amp; elevation:</b> drag the dot on the ball (bottom left) for side, follow and draw; raise the cue with the slider for massé, piqué and jump shots. <b>Piqué:</b> 70–80°, dot low – the ball goes out and comes back. <b>Massé:</b> 70–80°, dot low and to one side – it sets off along the cue and hooks round to that side; harder goes further first. Past the dashed ring the tip slips (miscue).</p>
+        <p><b>Aim:</b> drag on the table (in Top view, the cue points where you drag; slow drags are fine). Tap a ball to aim straight at it.</p>
+        <p><b>Touch:</b> one finger sideways aims, up/down sets how hard the shot preview is struck (shown on its line; without the preview: look from higher or lower); two fingers down and up stroke (draw back first), a pinch zooms, a two-finger tap takes the shot back; three fingers move the dot on the ball.</p>
+        <p><b>First person view:</b> drag up/down to swing your eyes over the ball, which stays where it is on the screen; middle-drag to raise and lower your head. Keys: E / Q head up / down, Page Up / Page Down over the ball, Home resets.</p>
+        <p><b>Stroke:</b> the cue follows your finger on the stroke strip, or two fingers anywhere on the table. Pull back, then push through the ball – the cue's speed when it meets the ball is the shot. Lifting the finger never shoots. The <b>velocity curve</b> above sets how hard the ball is struck for how fast you push: drag its points – flatter where a push should be judged finely, steeper where it should change more; the blue marks are your last strokes. With a mouse, hold the <b>right button</b> anywhere and move it back and forward.</p>
+        <p><b>Spin &amp; elevation:</b> drag the dot on the ball (bottom left) for side, follow and draw; raise the cue in the picture next to it (drag it round the ball) for massé, piqué and jump shots. <b>Piqué:</b> 70–80°, dot low – the ball goes out and comes back. <b>Massé:</b> 70–80°, dot low and to one side – it sets off along the cue and hooks round to that side; harder goes further first. Past the dashed ring the tip slips (miscue).</p>
+        <p><b>Trackpad:</b> two fingers left/right aim, up/down set how hard the shot preview is struck (shown on its line; without the preview: look from higher or lower), pinch zooms. With <b>Shift</b>: one finger back and forward strokes, two fingers move the dot on the ball, a pinch raises or lowers the cue. (A mouse wheel zooms; with Shift it raises the cue.)</p>
         <p><b>3-cushion preview:</b> the cushions are numbered; ×2 marks where the cue ball meets the first ball again (a kiss – allowed, but hard to control).</p>
         <p><b>Keys:</b> ← → aim (Shift: fine), ↑ ↓ elevation, W A S D spin, Space hold-and-release stroke, F2 / C camera, V aid, U undo, R (or the R button) replay the last shot – 🎬 saves it as a video –, Esc skip to the end of a rolling shot (otherwise the menu).</p>
       </div>
@@ -298,6 +342,6 @@
 
   <div id="updateBtn" hidden>New version ready – tap to update</div>
 
-  <script type="module" src="src/main.js"></script>
+  <script type="module" id="mainScript" src="src/main.js"></script>
 </body>
 </html>
