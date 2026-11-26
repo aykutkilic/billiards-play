@@ -56,7 +56,7 @@
       }, true);
     })();
   </script>
-  <canvas id="view"></canvas>
+  <canvas id="view" tabindex="0" aria-label="Billiards table"></canvas>
   <canvas id="fade" hidden></canvas>
 
   <!-- scoreboard and buttons -->
@@ -68,7 +68,7 @@
   </div>
   <div id="topRight">
     <button id="camBtn" class="chip" title="Camera (F2)"><span class="ico">🎥</span><b id="camName">First person</b></button>
-    <button id="assistBtn" class="chip" title="Aiming aid (A)"><span class="ico">◎</span><b id="assistName">Aim line</b></button>
+    <button id="assistBtn" class="chip" title="Aiming aid"><span class="ico">◎</span><b id="assistName">Aim line</b></button>
     <button id="replayBtn" class="chip icon" title="Replay the last shot (R)" aria-label="Replay the last shot"><b class="letter">R</b></button>
     <button id="placeBtn" class="chip icon" title="Practice: move the balls" aria-label="Move the balls" hidden>✋</button>
     <button id="undoBtn" class="chip icon" title="Take the shot back (U)">↶</button>
@@ -77,7 +77,7 @@
   </div>
   </div>
   <div id="toast" hidden></div>
-  <div id="hint"></div>
+  <div id="hint"><span id="hintText"></span> <button id="retryAI" hidden>Retry computer turn</button></div>
   <div id="pvSpeed" hidden></div>
 
   <!-- spin and elevation -->
@@ -117,7 +117,7 @@
 
     <section class="tab" data-tab="game" hidden>
       <div class="games" id="gameList"></div>
-      <div class="row lbl"><span>Play against</span>
+      <div class="row lbl"><label for="oppSel">Play against</label>
         <select id="oppSel">
           <option value="practice">Nobody – practice</option>
           <option value="ai:easy">Computer – Easy</option>
@@ -126,10 +126,10 @@
           <option value="local">A friend, on this device</option>
         </select>
       </div>
-      <div class="row lbl" id="targetRow"><span>Points to win</span>
+      <div class="row lbl" id="targetRow"><label for="targetSel">Points to win</label>
         <select id="targetSel"><option>5</option><option>10</option><option selected>15</option><option>25</option><option>40</option></select>
       </div>
-      <div class="row lbl"><span>Aiming aids allowed</span>
+      <div class="row lbl"><label for="aidsSel">Aiming aids allowed</label>
         <select id="aidsSel"><option value="preview" selected>All – aim line and shot preview</option><option value="line">Aim line only</option><option value="off">None</option></select>
       </div>
       <div class="row"><button id="newGameBtn" class="primary wide">New game</button></div>
@@ -149,7 +149,7 @@
         <button id="copyLink" class="ghost small">Copy link</button>
       </div>
       <div class="invite" id="accessRow" hidden>
-        <span class="muted small">Who can join</span>
+        <label class="muted small" for="roomAccess">Who can join</label>
         <select id="roomAccess" class="small">
           <option value="public">Anyone (public)</option>
           <option value="password">With the password</option>
@@ -171,7 +171,7 @@
         <div id="createRow">
           <div class="row">
             <input id="newRoomName" placeholder="Room name (optional)" maxlength="28">
-            <select id="newRoomAccess"><option value="public">Public</option><option value="password">Password</option><option value="private">Private</option></select>
+            <select aria-label="New room access" id="newRoomAccess"><option value="public">Public</option><option value="password">Password</option><option value="private">Private</option></select>
           </div>
           <div class="row">
             <input id="newRoomPass" placeholder="Password" maxlength="20" autocomplete="off" hidden>
@@ -204,12 +204,12 @@
     </section>
 
     <section class="tab" data-tab="controls" hidden>
-      <div class="row lbl"><span>Stroke sensitivity <b id="sensVal"></b></span><input id="sens" type="range" min="0.4" max="2.5" step="0.05" value="1"></div>
+      <div class="row lbl"><label for="sens">Stroke sensitivity <b id="sensVal"></b></label><input id="sens" type="range" min="0.4" max="2.5" step="0.05" value="1"></div>
       <div class="row lbl"><span>Velocity curve</span><span class="muted small" style="text-align:right">flat: finer · steep: quicker</span></div>
       <canvas id="curvePad" width="720" height="460" aria-label="How hard the ball is struck for how fast the cue comes"></canvas>
       <div id="curvePresets" class="seg"><button class="small" data-k="straight">Straight</button><button class="small" data-k="soft">Fine soft</button><button class="small" data-k="medium">Fine medium</button><button class="small" data-k="hard">Fine hard</button></div>
-      <div class="row lbl"><span>Stroke strip on the</span><select id="strokeSide"><option value="right">Right</option><option value="left">Left</option></select></div>
-      <div class="row lbl"><span>Aim sensitivity <b id="aimSensVal"></b></span><input id="aimSens" type="range" min="0.3" max="2.5" step="0.05" value="1"></div>
+      <div class="row lbl"><label for="strokeSide">Stroke strip on the</label><select id="strokeSide"><option value="right">Right</option><option value="left">Left</option></select></div>
+      <div class="row lbl"><label for="aimSens">Aim sensitivity <b id="aimSensVal"></b></label><input id="aimSens" type="range" min="0.3" max="2.5" step="0.05" value="1"></div>
       <div class="help small">
         <p><b>Aim:</b> drag on the table (in Top view, the cue points where you drag; slow drags are fine). Tap a ball to aim straight at it.</p>
         <p><b>Touch:</b> one finger sideways aims, up/down sets how hard the shot preview is struck (shown on its line; without the preview: look from higher or lower); two fingers down and up stroke (draw back first), a pinch zooms, a two-finger tap takes the shot back; three fingers move the dot on the ball.</p>
@@ -223,24 +223,24 @@
     </section>
 
     <section class="tab" data-tab="view" hidden>
-      <div class="row lbl"><span>Camera (aiming)</span><select id="camSel"></select></div>
-      <div class="row lbl"><span>Camera (balls rolling)</span><select id="watchSel"></select></div>
-      <div class="row lbl"><span>Replay scores</span><select id="autoSel"><option value="carom">3-cushion points</option><option value="all">Points and pots</option><option value="off">No</option></select></div>
-      <div class="row lbl"><span>Aiming aid</span><select id="assistSel"><option value="off">Off</option><option value="line">Aim line</option><option value="preview">Shot preview</option></select></div>
-      <div class="row lbl"><span>Graphics</span><select id="qualSel"><option value="auto">Auto</option><option value="high">High</option><option value="low">Light</option></select></div>
-      <div class="row lbl"><span>Follow the balls (TV)</span><input type="checkbox" id="followChk" checked></div>
+      <div class="row lbl"><label for="camSel">Camera (aiming)</label><select id="camSel"></select></div>
+      <div class="row lbl"><label for="watchSel">Camera (balls rolling)</label><select id="watchSel"></select></div>
+      <div class="row lbl"><label for="autoSel">Replay scores</label><select id="autoSel"><option value="carom">3-cushion points</option><option value="all">Points and pots</option><option value="off">No</option></select></div>
+      <div class="row lbl"><label for="assistSel">Aiming aid</label><select id="assistSel"><option value="off">Off</option><option value="line">Aim line</option><option value="preview">Shot preview</option></select></div>
+      <div class="row lbl"><label for="qualSel">Graphics</label><select id="qualSel"><option value="auto">Auto</option><option value="high">High</option><option value="low">Light</option></select></div>
+      <div class="row lbl"><label for="followChk">Follow the balls (TV)</label><input type="checkbox" id="followChk" checked></div>
       <div class="row"><button id="fsBtn2" class="ghost">⛶ Fullscreen</button><button id="installBtn" class="ghost">📲 Install app</button></div>
       <p class="muted small" id="verTag"></p>
     </section>
 
     <section class="tab" data-tab="sound" hidden>
-      <div class="row lbl"><span>Volume</span><input id="vol" type="range" min="0" max="1" step="0.05" value="0.8"></div>
-      <div class="row lbl"><span>Mute</span><input type="checkbox" id="muteChk"></div>
+      <div class="row lbl"><label for="vol">Volume</label><input id="vol" type="range" min="0" max="1" step="0.05" value="0.8"></div>
+      <div class="row lbl"><label for="muteChk">Mute</label><input type="checkbox" id="muteChk"></div>
       <h4>Narrator · Anlatıcı</h4>
       <p class="muted small">A voice that comments on the game live, in English or Turkish. It runs in this browser; the first time, about 400 MB is downloaded from Hugging Face and kept (shared with Parcel).</p>
-      <div class="row lbl"><span>Language</span><select id="narLang"><option value="en">English</option><option value="tr">Türkçe</option></select></div>
-      <div class="row lbl"><span>Voice</span><select id="narVoice"></select></div>
-      <div class="row lbl"><span>Speaks</span><select id="narWhen"><option value="all">While aiming, rolling and after</option><option value="after">Only after a shot</option></select></div>
+      <div class="row lbl"><label for="narLang">Language</label><select id="narLang"><option value="en">English</option><option value="tr">Türkçe</option></select></div>
+      <div class="row lbl"><label for="narVoice">Voice</label><select id="narVoice"></select></div>
+      <div class="row lbl"><label for="narWhen">Speaks</label><select id="narWhen"><option value="all">While aiming, rolling and after</option><option value="after">Only after a shot</option></select></div>
       <div id="narBar" hidden><i></i></div>
       <p id="narState" class="muted small"></p>
       <div class="row"><button id="narBtn" class="primary">Download and turn on</button><button id="narTest" class="ghost" hidden>Test</button></div>
@@ -340,7 +340,7 @@
     </div>
   </div>
 
-  <div id="updateBtn" hidden>New version ready – tap to update</div>
+  <button id="updateBtn" hidden>New version ready – update</button>
 
   <script type="module" id="mainScript" src="src/main.js"></script>
 </body>
