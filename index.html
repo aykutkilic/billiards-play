@@ -126,9 +126,22 @@
           <option value="local">A friend, on this device</option>
         </select>
       </div>
+      <div class="row lbl"><label for="tableSel">Table</label>
+        <select id="tableSel"></select>
+      </div>
+      <div class="row lbl" id="pocketsRow" hidden><label for="pocketsChk">Pockets</label>
+        <input type="checkbox" id="pocketsChk" checked>
+      </div>
       <div class="row lbl" id="targetRow"><label for="targetSel">Points to win</label>
         <select id="targetSel"><option>5</option><option>10</option><option selected>15</option><option>25</option><option>40</option></select>
       </div>
+      <details id="proBox" class="pro">
+        <summary>Pro settings</summary>
+        <p class="muted small" id="sizeFor"></p>
+        <div class="row lbl"><label for="sizeL">Table length (cm)</label><input type="number" id="sizeL" min="150" max="450" step="1" inputmode="numeric"></div>
+        <div class="row lbl"><label for="sizeW">Table width (cm)</label><input type="number" id="sizeW" min="75" max="250" step="1" inputmode="numeric"></div>
+        <div class="row"><button id="sizeReset" class="ghost small">Standard size</button></div>
+      </details>
       <div class="row lbl"><label for="aidsSel">Aiming aids allowed</label>
         <select id="aidsSel"><option value="preview" selected>All – aim line and shot preview</option><option value="line">Aim line only</option><option value="off">None</option></select>
       </div>

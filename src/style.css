@@ -171,6 +171,10 @@ button.icon { padding: 4px 9px; }
 .games button b { font-size: 14px; }
 .games button span { font-size: 11px; color: var(--muted); }
 .games button.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.pro { margin: 6px 0; }
+.pro summary { cursor: pointer; font-size: 13px; color: var(--muted); padding: 4px 0; }
+.pro input[type=number] { width: 6em; }
+.games h5 { grid-column: 1 / -1; margin: 6px 0 -2px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .help p { margin: 6px 0; color: #cfccc4; }
 ul { list-style: none; padding: 0; margin: 4px 0; }
 #orList li, #memberList li, #seatList li { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 6px 8px; border-radius: 8px; background: rgba(255,255,255,.04); margin-bottom: 4px; }
